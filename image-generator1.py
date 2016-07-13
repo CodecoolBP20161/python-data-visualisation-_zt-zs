@@ -2,7 +2,7 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 import random
-from connect_db import sql_querys
+from connect_db import sql_queries
 
 
 # # very 'in progress'
@@ -75,6 +75,7 @@ def get_y(i):
 not_empty = []
 test_list = ["1company", "2project", "3budget", "4status"]
 x, y = 0, 0
+
 
 def print_text():
     for i in test_list:

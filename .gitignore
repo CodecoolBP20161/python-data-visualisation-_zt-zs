@@ -101,6 +101,7 @@ ENV/
 
 # Sample image
 sample-out.png
+out.png
 
 # locally generated database-connect string
 connect_str.txt

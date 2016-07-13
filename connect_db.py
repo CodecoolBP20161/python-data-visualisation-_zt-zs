@@ -3,15 +3,18 @@
 import psycopg2
 
 
+# generating local connect strings into a txt file
 def generate_connect_str():
     with open('connect_str.txt', 'w') as connect_str:
         connect_values = []
         connect_inputs = ['dbname', 'user', 'password']
         for i in connect_inputs:
             connect_values.append("""{0}='{1}'""".format(i, input('Please enter your {0}: '.format(i))))
-        connect_str.write("""{0} {1} host='localhost' {2}""".format(connect_values[0], connect_values[1], connect_values[2]))
+        connect_str.write("""{0} {1} host='localhost' \
+{2}""".format(connect_values[0], connect_values[1], connect_values[2]))
 
 
+# reading connect string from local txt file
 def connect_params():
     with open('connect_str.txt', 'r') as connect_str:
         connect_str = connect_str.read()
@@ -19,11 +22,7 @@ def connect_params():
 
 
 def sql_querys():
-    query_values = []
-    # opening the sql file that stores the querys as a list of strings
-    # with open('querys.sql', 'r') as querys:
-    #     query_strings = querys.readlines()
-    # for i in query_strings:
+    num_of_querys = 2
     try:
         # setup connection string
         try:
@@ -37,16 +36,15 @@ def sql_querys():
         conn.autocommit = True
         # create a psycopg2 cursor that can execute queries
         cursor = conn.cursor()
-        # sql querys as a string from an external sql file
-        execute_string = """SELECT name FROM project;"""
-        # running the querys
-        cursor.execute(str(execute_string))
-        # Fetch and print the result of the last execution
-        rows = cursor.fetchall()
-        # query_values.append(rows)
-        print(rows)
+        # create sql query strings from an external sql files and execute them
+        all_querys = []
+        for i in range(num_of_querys):
+            with open('query{0}.sql'.format(i + 1), 'r') as query_string:
+                query_string = query_string.read()
+            cursor.execute(str(query_string))
+            all_querys.append(cursor.fetchall())
+        # return the result of each executions as list of list of tuples
+        return all_querys
     except Exception as e:
         print("Uh oh, can't connect. Invalid dbname, user or password?")
         print(e)
-    # return query_values
-sql_querys()

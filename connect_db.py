@@ -22,8 +22,8 @@ def connect_params():
         return connect_str
 
 
-def sql_querys():
-    num_of_querys = 2
+def sql_queries():
+    num_of_queries = 2
     try:
         # setup connection string
         try:
@@ -38,15 +38,15 @@ def sql_querys():
         # create a psycopg2 cursor that can execute queries
         cursor = conn.cursor()
         # read sql query strings from external sql files and execute them
-        all_querys = []
-        for i in range(num_of_querys):
+        all_queries = []
+        for i in range(num_of_queries):
             with open('query{0}.sql'.format(i + 1), 'r') as query_string:
                 query_string = query_string.read()
             cursor.execute(str(query_string))
-            all_querys.append(cursor.fetchall())
+            all_queries.append(cursor.fetchall())
         # return the result of each executions as list of list of tuples
-        return all_querys
+        return all_queries
     except Exception as e:
         print("Uh oh, can't connect. Invalid dbname, user or password?")
         print(e)
-sql_querys()
+sql_queries()

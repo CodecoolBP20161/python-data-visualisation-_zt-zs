@@ -1,5 +1,6 @@
 # sample-image-generator will use this scipt's return values to generate the images
-# the script reads the query file, executes it line by line and returns the return values
+# the script reads the query file, executes it line by line
+# return value is a list of lists(sql querys) of tuples(sql query return values)
 import psycopg2
 
 
@@ -48,3 +49,4 @@ def sql_querys():
     except Exception as e:
         print("Uh oh, can't connect. Invalid dbname, user or password?")
         print(e)
+sql_querys()

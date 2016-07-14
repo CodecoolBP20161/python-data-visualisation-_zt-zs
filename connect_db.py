@@ -22,31 +22,55 @@ def connect_params():
         return connect_str
 
 
+# converting hex values to rgb triplets
+def hex_to_rgb(color_comps):
+    if color_comps:
+        color_comps = color_comps.split()
+        rgb_colors = []
+        for hex_value in color_comps:
+            hex_value = hex_value.lstrip('#')
+            lv = len(hex_value)
+            rgb_colors.append(tuple(int(hex_value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3)))
+        color_counter = 0
+        avg_color = [0, 0, 0]
+        for triplet in rgb_colors:
+            color_counter += 1
+            for i in range(0, 3):
+                avg_color[i] += triplet[i]
+        for i in avg_color:
+            i /= color_counter
+        return tuple(avg_color)
+    else:
+        return(0, 0, 0)
+
+
 def sql_queries():
     num_of_queries = 2
+    # setup connection string
     try:
-        # setup connection string
-        try:
-            connect_str = str(connect_params())
-        except Exception:
-            generate_connect_str()
-            connect_str = str(connect_params())
-        # use our connection values to establish a connection
-        conn = psycopg2.connect(connect_str)
-        # set autocommit option, to do every query when we call it
-        conn.autocommit = True
-        # create a psycopg2 cursor that can execute queries
-        cursor = conn.cursor()
-        # read sql query strings from external sql files and execute them
-        all_queries = []
-        for i in range(num_of_queries):
-            with open('query{0}.sql'.format(i + 1), 'r') as query_string:
-                query_string = query_string.read()
-            cursor.execute(str(query_string))
-            all_queries.append(cursor.fetchall())
-        # return the result of each executions as list of list of tuples
-        return all_queries
-    except Exception as e:
-        print("Uh oh, can't connect. Invalid dbname, user or password?")
-        print(e)
-sql_queries()
+        connect_str = str(connect_params())
+    except Exception:
+        generate_connect_str()
+        connect_str = str(connect_params())
+    # use our connection values to establish a connection
+    conn = psycopg2.connect(connect_str)
+    # set autocommit option, to do every query when we call it
+    conn.autocommit = True
+    # create a psycopg2 cursor that can execute queries
+    cursor = conn.cursor()
+    # read sql query strings from external sql files and execute them
+    all_queries = []
+    for i in range(num_of_queries):
+        with open('query{0}.sql'.format(i + 1), 'r') as query_string:
+            query_string = query_string.read()
+        cursor.execute(str(query_string))
+        all_queries.append(cursor.fetchall())
+    # convert hex color values to averaged rgb triplets
+    new_queries = []
+    new_cases = []
+    for query in all_queries:
+        for case in query:
+            new_cases.append(tuple([case[0], case[1], hex_to_rgb(case[2])]))
+        new_queries.append(new_cases)
+    # return the result of each executions as list of list of tuples
+    return new_queries

@@ -45,7 +45,7 @@ def hex_to_rgb(color_comps):
 
 
 def sql_queries():
-    num_of_queries = 2
+    num_of_queries = 4
     # setup connection string
     try:
         connect_str = str(connect_params())

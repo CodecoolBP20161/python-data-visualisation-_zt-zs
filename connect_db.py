@@ -67,8 +67,8 @@ def sql_queries():
         all_queries.append(cursor.fetchall())
     # convert hex color values to averaged rgb triplets
     new_queries = []
-    new_cases = []
     for query in all_queries:
+        new_cases = []
         for case in query:
             new_cases.append(tuple([case[0], case[1], hex_to_rgb(case[2])]))
         new_queries.append(new_cases)

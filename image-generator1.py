@@ -3,7 +3,6 @@ from PIL import ImageFont
 from PIL import ImageDraw
 import random
 from connect_db import sql_queries
-from hex_to_rgb import hex_to_rgb
 
 
 # very 'in progress'
@@ -41,14 +40,13 @@ class Text():
         return resize_list
 
 
-img = Image.new("RGB", (512, 512), "white")
+img = Image.new("RGB", (712, 712), "black")
 draw = ImageDraw.Draw(img)
 
 
 default_size = 10
 try:
-    font_path = "/usr/share/fonts/FreeSans.ttf"
-    # font = ImageFont.truetype(font_path, default_size)
+    font_path = "ComicSansMS3.ttf"
     font = ImageFont.truetype(font_path)
 except:
     font = ImageFont.load_default()
@@ -90,7 +88,7 @@ def doge(img):
 
 
 def print_text(datas, filename):
-    # doge(img)
+    doge(img)
     # x, y = 0, 0
 
     # a list for already used coordinates
@@ -99,10 +97,10 @@ def print_text(datas, filename):
     for i in datas:
         font = ImageFont.truetype(font_path, default_size+i.size)
         text_size = draw.textsize(i.text, font=font)
-        try:
-            fill = i.fill
-        except:
-            fill = "black"
+        # try:
+        fill = i.fill
+        # except:
+        #     fill = "black"
         x = get_x(text_size)
         y = get_y(text_size)
         # if (i.x< RectB.X2 & & RectA.X2 > RectB.X1 & &

@@ -2,13 +2,13 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 import random
-from connect_db import sql_querys
+from connect_db import sql_queries
 from hex_to_rgb import hex_to_rgb
 
 
 # very 'in progress'
 class Text():
-    QUERIES = [sql_querys()[0], sql_querys()[1]]
+    QUERIES = [sql_queries()[0], sql_queries()[1]]
     def __init__(self, queries):
         self.fill = queries[2]
         self.size = queries[1]
@@ -23,8 +23,8 @@ class Text():
 
 
 
-companiess = Text.output_first(sql_querys()[0])
-projects = Text.output_first(sql_querys()[1])
+companiess = Text.output_first(sql_queries()[0])
+projects = Text.output_first(sql_queries()[1])
 
 img = Image.new("RGBA", (512, 512), "black")
 draw = ImageDraw.Draw(img)

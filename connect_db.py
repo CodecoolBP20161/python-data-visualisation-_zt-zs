@@ -1,6 +1,10 @@
-# sample-image-generator will use this scipt's return values to generate the images
-# the script reads the query file, executes it line by line
-# return value is a list of lists(sql querys) of tuples(sql query return values)
+# This file started as a simple database connect string gerenator,
+# but ended up being much more than that.
+# As of now, in addition of generating the local database connect string,
+# it also executes the sql queries and transforms their hex colors to
+# single, averaged rgb triplets.
+# menu.py uses its return values (a list of lists of tuples from sql_queries())
+# to call image-generator1.py with.
 import psycopg2
 
 
@@ -27,23 +31,27 @@ def hex_to_rgb(color_comps):
     if color_comps:
         color_comps = color_comps.split()
         rgb_colors = []
+        # converting hex values to rgb triplets
         for hex_value in color_comps:
             hex_value = hex_value.lstrip('#')
             lv = len(hex_value)
             rgb_colors.append(tuple(int(hex_value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3)))
-        color_counter = 0
+        # creating single, average rgb triplet
+        color_denominator = 0
         avg_color = [0, 0, 0]
         for triplet in rgb_colors:
-            color_counter += 1
+            color_denominator += 1
             for i in range(0, 3):
                 avg_color[i] += triplet[i]
         for i in avg_color:
-            i /= color_counter
+            i /= color_denominator
         return tuple(avg_color)
     else:
+        # returns with black color, if no color given
         return(0, 0, 0)
 
 
+# main function
 def sql_queries():
     num_of_queries = 4
     # setup connection string

@@ -25,13 +25,13 @@ class Text():
             for d in resize_list:
                 if d.size is not None:
                     if d.size <= 10:
-                        d.size = int(d.size*10)
+                        d.size = int(d.size*8)
                     elif d.size > 10 and d.size <= 100:
-                        d.size = int(d.size//135)
+                        d.size = int(d.size//200)
                     elif d.size > 100 and d.size <= 1000:
-                        d.size = int(d.size // 150)
+                        d.size = int(d.size // 220)
                     elif d.size > 1000:
-                        d.size = int(d.size//150)
+                        d.size = int(d.size//250)
                 else:
                     d.size = 11
         else:  # for longer lists -> smaller letters
@@ -105,6 +105,7 @@ def print_text(datas, filename):
         fill = i.fill
         x = get_x(text_size)
         y = get_y(text_size)
+        # if (i.x< RectB.X2 & & RectA.X2 > RectB.X1 & & RectA.Y1 < RectB.Y2 & & RectA.Y2 > RectB.Y1)
         for dictionary in not_empty:
             keys = list(dictionary.keys())
             values = list(dictionary.values())

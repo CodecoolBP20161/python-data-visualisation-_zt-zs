@@ -106,6 +106,7 @@ out_companies.png
 out_projects.png
 out_clients.png
 out_company_hq.png
+out_managers.png
 
 # locally generated database-connect string
 connect_str.txt

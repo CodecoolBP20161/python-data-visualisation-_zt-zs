@@ -1,4 +1,4 @@
-# This file started as a simple database connect string gerenator,
+# This file started as a simple database connect string generator,
 # but ended up being much more than that.
 # As of now, in addition of generating the local database connect string,
 # it also executes the sql queries and transforms their hex colors to
@@ -51,7 +51,7 @@ def hex_to_rgb(color_comps):
 
 # main function
 def sql_queries():
-    num_of_queries = 4
+    num_of_queries = 5
     # setup connection string
     try:
         connect_str = str(connect_params())

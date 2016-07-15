@@ -1,6 +1,10 @@
-# sample-image-generator will use this scipt's return values to generate the images
-# the script reads the query file, executes it line by line
-# return value is a list of lists(sql querys) of tuples(sql query return values)
+# This file started as a simple database connect string gerenator,
+# but ended up being much more than that.
+# As of now, in addition of generating the local database connect string,
+# it also executes the sql queries and transforms their hex colors to
+# single, averaged rgb triplets.
+# menu.py uses its return values (a list of lists of tuples from sql_queries())
+# to call image-generator1.py with.
 import psycopg2
 
 
@@ -31,19 +35,21 @@ def hex_to_rgb(color_comps):
             hex_value = hex_value.lstrip('#')
             lv = len(hex_value)
             rgb_colors.append(tuple(int(hex_value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3)))
-        color_counter = 0
-        avg_color = [0, 0, 0]
-        for triplet in rgb_colors:
-            color_counter += 1
-            for i in range(0, 3):
-                avg_color[i] += triplet[i]
-        for i in avg_color:
-            i /= color_counter
-        return tuple(avg_color)
+            color_counter = 0
+            avg_color = [0, 0, 0]
+            for triplet in rgb_colors:
+                color_counter += 1
+                for i in range(0, 3):
+                    avg_color[i] += triplet[i]*17
+            for i in avg_color:
+                i /= color_counter
+            return tuple(avg_color)
     else:
-        return(0, 0, 0)
+        # returns with black color, if no color given
+        return(255, 255, 255)
 
 
+# main function
 def sql_queries():
     num_of_queries = 4
     # setup connection string
@@ -67,8 +73,8 @@ def sql_queries():
         all_queries.append(cursor.fetchall())
     # convert hex color values to averaged rgb triplets
     new_queries = []
-    new_cases = []
     for query in all_queries:
+        new_cases = []
         for case in query:
             new_cases.append(tuple([case[0], case[1], hex_to_rgb(case[2])]))
         new_queries.append(new_cases)

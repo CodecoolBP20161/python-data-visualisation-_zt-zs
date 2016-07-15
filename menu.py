@@ -1,21 +1,31 @@
 from connect_db import sql_queries
+import image_generator
 import time
+
+
 queries = sql_queries()
-menu = True
-while menu:
+menu = 0
+while not menu:
     print('''
     1. client names tag-cloud based on the number of projects by a company
     2. project names tag-cloud based on the size of the budgets
-    3. third menu item
-    4. fourth menu item
+    3. client names tag-cloud based on the IDs of the projects
+    4. client HQ tag-cloud
     ''')
     menu = int(input('Select a menu option, please: '))
     if menu == 1:
-        print(queries[0])  # tag_cloud_1
+        image = image_generator.Text.output(sql_queries(), 0)
+        image_generator.Text.sizing(image)
+        image_generator.print_text(image, "companies")
     elif menu == 2:
-        print(queries[1])  # tag_cloud_2
+        image = image_generator.Text.output(sql_queries(), 1)
+        image_generator.Text.sizing(image)
+        image_generator.print_text(image, "projects")
     elif menu == 3:
-        print(queries[2])  # tag_cloud_3
+        image = image_generator.Text.output(sql_queries(), 2)
+        image_generator.Text.sizing(image)
+        image_generator.print_text(image, "clients")
     elif menu == 4:
-        print(queries[3])     # tag_cloud_4
-    time.sleep(1)
+        image = image_generator.Text.output(sql_queries(), 3)
+        image_generator.Text.sizing(image)
+        image_generator.print_text(image, "company_hq")

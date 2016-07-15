@@ -6,6 +6,7 @@
 # menu.py uses its return values (a list of lists of tuples from sql_queries())
 # to call image-generator1.py with.
 import psycopg2
+import random
 
 
 # generating local connect string into a txt file
@@ -72,11 +73,13 @@ def sql_queries():
         cursor.execute(str(query_string))
         all_queries.append(cursor.fetchall())
     # convert hex color values to averaged rgb triplets
+    dogenator = ['such', 'much', 'wow']
     new_queries = []
     for query in all_queries:
         new_cases = []
         for case in query:
-            new_cases.append(tuple([case[0], case[1], hex_to_rgb(case[2])]))
+            new_cases.append(tuple(['{0} \
+{1}'.format(dogenator[random.randint(0, 2)], case[0]), case[1], hex_to_rgb(case[2])]))
         new_queries.append(new_cases)
     # return the result of each executions as list of list of tuples
     return new_queries

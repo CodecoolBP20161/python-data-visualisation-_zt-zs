@@ -60,26 +60,29 @@ def sql_queries():
         generate_connect_str()
         connect_str = str(connect_params())
     # use our connection values to establish a connection
-    conn = psycopg2.connect(connect_str)
-    # set autocommit option, to do every query when we call it
-    conn.autocommit = True
-    # create a psycopg2 cursor that can execute queries
-    cursor = conn.cursor()
-    # read sql query strings from external sql files and execute them
-    all_queries = []
-    for i in range(num_of_queries):
-        with open('query{0}.sql'.format(i + 1), 'r') as query_string:
-            query_string = query_string.read()
-        cursor.execute(str(query_string))
-        all_queries.append(cursor.fetchall())
-    # convert hex color values to averaged rgb triplets
-    dogenator = ['such', 'much', 'wow']
-    new_queries = []
-    for query in all_queries:
-        new_cases = []
-        for case in query:
-            new_cases.append(tuple(['{0} \
-{1}'.format(dogenator[random.randint(0, 2)], case[0]), case[1], hex_to_rgb(case[2])]))
-        new_queries.append(new_cases)
-    # return the result of each executions as list of list of tuples
-    return new_queries
+    try:
+        conn = psycopg2.connect(connect_str)
+        # set autocommit option, to do every query when we call it
+        conn.autocommit = True
+        # create a psycopg2 cursor that can execute queries
+        cursor = conn.cursor()
+        # read sql query strings from external sql files and execute them
+        all_queries = []
+        for i in range(num_of_queries):
+            with open('query{0}.sql'.format(i + 1), 'r') as query_string:
+                query_string = query_string.read()
+            cursor.execute(str(query_string))
+            all_queries.append(cursor.fetchall())
+        # convert hex color values to averaged rgb triplets and add dogenator
+        dogenator = ['such', 'much', 'wow']
+        new_queries = []
+        for query in all_queries:
+            new_cases = []
+            for case in query:
+                new_cases.append(tuple(['{0} \
+    {1}'.format(dogenator[random.randint(0, 2)], case[0]), case[1], hex_to_rgb(case[2])]))
+            new_queries.append(new_cases)
+        # return the result of each executions as list of list of tuples
+        return new_queries
+    except Exception:
+        print("Cannot connect database. Edit 'connect_str.txt' to fix possible typos, then run the program again.")
